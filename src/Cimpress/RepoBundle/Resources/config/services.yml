@@ -1,0 +1,4 @@
+services:
+#    repo.example:
+#        class: Cimpress\RepoBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

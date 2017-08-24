@@ -1,0 +1,6 @@
+repo:
+    resource: "@RepoBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+
