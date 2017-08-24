@@ -1,9 +1,9 @@
 {% extends '::base.html.twig' %}
 
 {% block content %}
-
+    {#{{ dump(data.repositories) }}#}
     <div class="content-wrapper">
-        <h1>Browse Repositories</h1>
+        <h1>Browse Repositories (Symfony)</h1>
 
         {#<div class="filters"></div>#}
 
@@ -16,10 +16,10 @@
                             <th>Sr.No.</th>
                             <th>Name</th>
                             <th>Owner</th>
+                            <th width="400">Description</th>
                             <th>Language</th>
-                            <th>Description</th>
                             <th>Size</th>
-                            <th>Score</th>
+                            <th>Forks</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -30,8 +30,8 @@
                             <td>{{ repository.owner }}</td>
                             <td>{{ repository.description }}</td>
                             <td>{{ repository.language }}</td>
-                            <td>{{ repository.size }}</td>
-                            <td>{{ repository.score }}</td>
+                            <td>{{ repository.size | formatSize }}</td>
+                            <td>{{ repository.forks }}</td>
                         </tr>
                         {% endfor %}
                         </tbody>
@@ -39,29 +39,29 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="pagination-wrapper text-right">
-                    <ul class="pagination">
-                        <li>
-                            <a href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li>
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        {#<div class="row">#}
+            {#<div class="col-sm-12">#}
+                {#<div class="pagination-wrapper text-right">#}
+                    {#<ul class="pagination">#}
+                        {#<li>#}
+                            {#<a href="{{ data.pagination.first }}" aria-label="Previous" >#}
+                                {#<span aria-hidden="true">&laquo;</span>#}
+                            {#</a>#}
+                        {#</li>#}
+                        {#<li><a href="#">1</a></li>#}
+                        {#<li><a href="#">2</a></li>#}
+                        {#<li><a href="#">3</a></li>#}
+                        {#<li><a href="#">4</a></li>#}
+                        {#<li><a href="#">5</a></li>#}
+                        {#<li>#}
+                            {#<a href="{{ data.pagination.prev }}" aria-label="Next">#}
+                                {#<span aria-hidden="true">&raquo;</span>#}
+                            {#</a>#}
+                        {#</li>#}
+                    {#</ul>#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
     </div>
 
 {% endblock %}

@@ -18,31 +18,46 @@ class Repo
     public function __construct()
     {
         $this->client = new \Github\Client();
+        $this->paginator  = new \Github\ResultPager($this->client);
         $this->repositories = [];
     }
 
     public function getRepositories($fullSpec)
     {
+
+        // Fetching Repositories Using paginator->fetchAll() method
+//        $organizationApi = $this->client->api('organization');
+//
+//        $parameters = array('symfony');
+//
+//        $searchSpec = (isset($fullSpec['searchSpec']) && !empty($fullSpec['searchSpec']))? $fullSpec['searchSpec'] : [] ;
+//
+//        if (isset($searchSpec['language']) && !empty($searchSpec['language'])){
+//            $parameters['language'] = $searchSpec['language'];
+//        }
+//
+//        $result = $this->paginator->fetchAll($organizationApi, 'repositories', $parameters);
+//        $pagination = $this->paginator->getPagination();
+//
+//        return [
+//            'repositories' => $result,
+//            'pagination' => $pagination,
+//        ];
+
+
+        // Fetching Repositories Using api('repo') method
         $searchSpec = (isset($fullSpec['searchSpec']) && !empty($fullSpec['searchSpec']))? $fullSpec['searchSpec'] : [] ;
         $pageSpec = (isset($fullSpec['pageSpec']) && !empty($fullSpec['pageSpec']))? $fullSpec['pageSpec'] : [] ;
 
         $pageNo = (isset($pageSpec['currentPage']) && !empty($pageSpec['currentPage'])) ? $pageSpec['currentPage'] : 1;
 
-        $criteria = $searchSpec;
-        $criteria['start_page'] = $pageNo;
-
-//        if (!empty($searchSpec)) {
-//            foreach ($searchSpec as $key=> $value) {
-//
-//            }
-//        }
-
-        $repos = $this->client->api('repo')->find('symfony', $criteria);
-
-        if(isset($repos['repositories']) && !empty($repos['repositories'])) {
-            return $repos['repositories'];
-        } else {
-            return $repos;
+        if (isset($searchSpec['language']) && !empty($searchSpec['language'])){
+            $parameters['language'] = $searchSpec['language'];
         }
+        $parameters['start_page'] = $pageNo;
+
+        $repos = $this->client->api('repo')->find('symfony', $parameters);
+
+        return $repos;
     }
 }

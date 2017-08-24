@@ -3,6 +3,7 @@
 namespace Cimpress\RepoBundle\Controller;
 
 use Cimpress\RepoBundle\Model\Repo;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     private $repo;
+    private $fullSpec;
+    private $currentPage;
 
     public function __construct()
     {
@@ -26,29 +29,30 @@ class DefaultController extends Controller
         $data = $this->indexDataAction($request);
         return $this->render('RepoBundle:Default:index.html.twig', [
             'data' => $data,
+            'currentPage' => $this->currentPage,
         ]);
     }
 
     public function indexDataAction(Request $request) {
 
-        $fullSpec = $this->setSearchSpec($request);
+        $this->setSearchSpec($request);
 
-        $data['repositories'] = $this->repo->getRepositories($fullSpec);
+        $data = $this->repo->getRepositories($this->fullSpec);
 
         return $data;
     }
 
     public function setSearchSpec(Request $request) {
-        $requestData = $request->getContent();
+        $requestData = $request->query->all();
 
-        $fullSpec = [];
+        $this->fullSpec = [];
+        $this->currentPage = 1;
         if(isset($requestData['language']) && !empty($requestData['language'])) {
-            $fullSpec['searchSpec']['language'] = $requestData['language'];
+            $this->fullSpec['searchSpec']['language'] = $requestData['language'];
         }
         if(isset($requestData['page']) && !empty($requestData['page'])) {
-            $fullSpec['pageSpec']['currentPage'] = $requestData['page'];
+            $this->fullSpec['pageSpec']['currentPage'] = $requestData['page'];
+            $this->currentPage = $requestData['page'];
         }
-
-        return $fullSpec;
     }
 }
